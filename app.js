@@ -48,6 +48,7 @@ function main() {
 		-0.5, -0.5,
 		-0.5, +0.5,
 		+0.5, -0.5,
+		+0.5, +0.5
 	];
 	const nVertices = vertices.length / 2;
 
@@ -73,5 +74,5 @@ function main() {
 	gl.enableVertexAttribArray(coord);
 
 	// DRAW TRIANGLE
-	gl.drawArrays(gl.TRIANGLES, 0, nVertices);
+	gl.drawArrays(gl.TRIANGLE_STRIP, 0, nVertices);
 }
