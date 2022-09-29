@@ -45,10 +45,12 @@ function main() {
 
 	// Define triangle vertices
 	var vertices = [
-		-0.5, +0.5,
 		-0.5, -0.5,
+		-0.5, +0.5,
 		+0.5, -0.5,
+		+0.5, +0.5
 	];
+	var nVertices = vertices.length / 2;
 
 	// SETUP SHADERS
 	var vertexShader = setupShader(gl, gl.VERTEX_SHADER, vertexShaderSource);
@@ -72,5 +74,5 @@ function main() {
 	gl.enableVertexAttribArray(coord);
 
 	// DRAW TRIANGLE
-	gl.drawArrays(gl.TRIANGLES, 0, 3);
+	gl.drawArrays(gl.TRIANGLE_STRIP, 0, nVertices);
 }
