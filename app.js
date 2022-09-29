@@ -11,8 +11,11 @@ const vertexShaderSource = `
 const fragmentShaderSource = `
 	precision mediump float;
 
+	varying lowp vec4 color;
+
 	void main() {
 		gl_FragColor = vec4(0.0, 0.0, 0.0, 1.0);
+		
 	}
 `;
 
@@ -52,6 +55,14 @@ function main() {
 	];
 	const nVertices = vertices.length / 2;
 
+	// Define colors (one for each vertex of the square)
+	const colors = [
+		1.0, 1.0, 1.0, 1.0, // white
+		1.0, 0.0, 0.0, 1.0, // red
+		0.0, 1.0, 0.0, 1.0, // green
+		0.0, 0.0, 1.0, 1.0, // blue
+	];
+
 	// SETUP SHADERS
 	var vertexShader = setupShader(gl, gl.VERTEX_SHADER, vertexShaderSource);
 	var fragmentShader = setupShader(gl, gl.FRAGMENT_SHADER, fragmentShaderSource);
@@ -67,6 +78,10 @@ function main() {
 	const vertexBuffer = gl.createBuffer(); // create empty buffer object
 	gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer); // bind array buffer
 	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW); // convert to 32bit array
+
+	const colorBuffer = gl.createBuffer();
+	gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
+	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(colors), gl.STATIC_DRAW);
 
 	// SETUP SHADER ATTRIBUTES
 	var coord = gl.getAttribLocation(program, "coordinates");
