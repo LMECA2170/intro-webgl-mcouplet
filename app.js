@@ -44,11 +44,12 @@ function main() {
 	}
 
 	// Define triangle vertices
-	var vertices = [
-		-0.5, +0.5,
+	const vertices = [
 		-0.5, -0.5,
+		-0.5, +0.5,
 		+0.5, -0.5,
 	];
+	const nVertices = vertices.length / 2;
 
 	// SETUP SHADERS
 	var vertexShader = setupShader(gl, gl.VERTEX_SHADER, vertexShaderSource);
@@ -62,7 +63,7 @@ function main() {
 	gl.useProgram(program);
 
 	// SETUP BUFFERS
-	var vertexBuffer = gl.createBuffer(); // create empty buffer object
+	const vertexBuffer = gl.createBuffer(); // create empty buffer object
 	gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer); // bind array buffer
 	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW); // convert to 32bit array
 
@@ -72,5 +73,5 @@ function main() {
 	gl.enableVertexAttribArray(coord);
 
 	// DRAW TRIANGLE
-	gl.drawArrays(gl.TRIANGLES, 0, 3);
+	gl.drawArrays(gl.TRIANGLES, 0, nVertices);
 }
