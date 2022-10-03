@@ -110,14 +110,14 @@ function main() {
 	// gl.drawArrays(gl.TRIANGLE_STRIP, 0, nVertices);
 
 	const rotationMatrix = mat4.create();
+	const velocity = Math.PI / 3; // angular velocity in rad/s
 
 	var then = 0;
 	function render(now) {
-		now *= 0.001; // ms to s
 		const dt = now - then;
 		then = now;
 
-		mat4.rotate(rotationMatrix, rotationMatrix, dt, [0,0,1]);
+		mat4.rotate(rotationMatrix, rotationMatrix, dt/1000 * velocity, [0,0,1]);
 		gl.uniformMatrix4fv(rotationMatrixLocation, gl.FALSE, rotationMatrix);
 		gl.drawArrays(gl.TRIANGLE_STRIP, 0, nVertices);
 	
