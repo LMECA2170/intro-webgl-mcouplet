@@ -78,6 +78,7 @@ function main() {
 	gl.enableVertexAttribArray(coord);
 
 	gl.drawArrays(gl.POINTS, 0, nVertices);
+	gl.drawArrays(gl.TRIANGLES, 0, nVertices);
 
 	// Make canvas clickable
 	rect = canvas.getBoundingClientRect();
@@ -87,5 +88,6 @@ function main() {
 		nVertices++;
 		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW); // convert to 32bit array
 		gl.drawArrays(gl.POINTS, 0, nVertices);
+		gl.drawArrays(gl.TRIANGLES, 0, nVertices);
 	});
 }
