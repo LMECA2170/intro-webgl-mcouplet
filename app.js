@@ -46,13 +46,7 @@ function main() {
 	}
 
 	// Define triangle vertices
-	var vertices = [
-		-0.5, -0.5,
-		-0.5, +0.5,
-		+0.5, -0.5,
-		+0.5, +0.5
-	];
-	var nVertices = vertices.length / 2;
+	var nVertices = data.vertices.length / 2;
 
 	// SETUP SHADERS
 	var vertexShader = setupShader(gl, gl.VERTEX_SHADER, vertexShaderSource);
@@ -72,7 +66,7 @@ function main() {
 	// Vertex positions
 	const vertexBuffer = gl.createBuffer(); // create empty buffer object
 	gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer); // bind array buffer
-	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW); // convert to 32bit array
+	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(data.vertices), gl.STATIC_DRAW); // convert to 32bit array
 	var coord = gl.getAttribLocation(program, "coordinates");
 	gl.vertexAttribPointer(coord, 2, gl.FLOAT, gl.FALSE, 0, 0);
 	gl.enableVertexAttribArray(coord);
@@ -83,10 +77,10 @@ function main() {
 	// Make canvas clickable
 	rect = canvas.getBoundingClientRect();
 	canvas.addEventListener('click', (e) => {
-		vertices.push(-1+2*(e.clientX-rect.left)/canvas.clientWidth);
-		vertices.push(+1-2*(e.clientY-rect.top )/canvas.clientHeight);
+		data.vertices.push(-1+2*(e.clientX-rect.left)/canvas.clientWidth);
+		data.vertices.push(+1-2*(e.clientY-rect.top )/canvas.clientHeight);
 		nVertices++;
-		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW); // convert to 32bit array
+		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(data.vertices), gl.STATIC_DRAW); // convert to 32bit array
 		gl.drawArrays(gl.POINTS, 0, nVertices);
 		gl.drawArrays(gl.TRIANGLES, 0, nVertices);
 	});
