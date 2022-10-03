@@ -1,13 +1,16 @@
+const mat4 = glMatrix.mat4; // 4 x 4 matrix
 
 const vertexShaderSource = `
 	precision mediump float;
 	attribute vec2 coordinates;
 	attribute vec3 aColor;
 
+	uniform mat4 uRotationMatrix;
+
 	varying lowp vec3 vColor;
 
 	void main() {
-		gl_Position = vec4(coordinates, 0.0, 1.0);
+		gl_Position = uRotationMatrix * vec4(coordinates, 0.0, 1.0);
 		vColor = aColor;
 	}
 `;
@@ -77,6 +80,9 @@ function main() {
 	gl.linkProgram(program);
 	gl.useProgram(program);
 
+	// // UNIFORM LOCATION
+	rotationMatrixLocation = gl.getUniformLocation(program, 'uRotationMatrix');
+
 	// SETUP BUFFERS AND SHADER ATTRIBUTES
 	// Vertex positions
 	const vertexBuffer = gl.createBuffer(); // create empty buffer object
@@ -94,6 +100,29 @@ function main() {
 	gl.vertexAttribPointer(colorAttribLocation, 3, gl.FLOAT, gl.FALSE, 0, 0);
 	gl.enableVertexAttribArray(colorAttribLocation);
 
+
 	// DRAW TRIANGLE
-	gl.drawArrays(gl.TRIANGLE_STRIP, 0, nVertices);
+	// const rotationMatrix = mat4.create();
+	// dt = 0.1;
+	// mat4.rotate(rotationMatrix, rotationMatrix, dt, [0,0,1]);
+	// mat4.rotate(rotationMatrix, rotationMatrix, dt, [0,0,1]);
+	// gl.uniformMatrix4fv(rotationMatrixLocation, gl.FALSE, rotationMatrix);
+	// gl.drawArrays(gl.TRIANGLE_STRIP, 0, nVertices);
+
+	const rotationMatrix = mat4.create();
+
+	var then = 0;
+	function render(now) {
+		now *= 0.001; // ms to s
+		const dt = now - then;
+		then = now;
+
+		mat4.rotate(rotationMatrix, rotationMatrix, dt, [0,0,1]);
+		gl.uniformMatrix4fv(rotationMatrixLocation, gl.FALSE, rotationMatrix);
+		gl.drawArrays(gl.TRIANGLE_STRIP, 0, nVertices);
+	
+		requestAnimationFrame(render);
+	}
+
+	requestAnimationFrame(render);
 }
