@@ -46,13 +46,13 @@ function main() {
 	}
 
 	// Define triangle vertices
-	const vertices = [
+	var vertices = [
 		-0.5, -0.5,
 		-0.5, +0.5,
 		+0.5, -0.5,
 		+0.5, +0.5
 	];
-	const nVertices = vertices.length / 2;
+	var nVertices = vertices.length / 2;
 
 	// SETUP SHADERS
 	var vertexShader = setupShader(gl, gl.VERTEX_SHADER, vertexShaderSource);
@@ -77,22 +77,15 @@ function main() {
 	gl.vertexAttribPointer(coord, 2, gl.FLOAT, gl.FALSE, 0, 0);
 	gl.enableVertexAttribArray(coord);
 
-	// const rotationMatrix = mat4.create();
-	// const velocity = Math.PI / 3; // angular velocity in rad/s
-
-	// var then = 0;
-	// function render(now) {
-	// 	const dt = now - then;
-	// 	then = now;
-
-	// 	mat4.rotate(rotationMatrix, rotationMatrix, dt/1000 * velocity, [0,0,1]);
-	// 	gl.uniformMatrix4fv(rotationMatrixLocation, gl.FALSE, rotationMatrix);
-	// 	gl.drawArrays(gl.TRIANGLE_STRIP, 0, nVertices);
-	
-	// 	requestAnimationFrame(render);
-	// }
-
 	gl.drawArrays(gl.POINTS, 0, nVertices);
 
-	// requestAnimationFrame(render);
+	// Make canvas clickable
+	rect = canvas.getBoundingClientRect();
+	canvas.addEventListener('click', (e) => {
+		vertices.push(-1+2*(e.clientX-rect.left)/canvas.clientWidth);
+		vertices.push(+1-2*(e.clientY-rect.top )/canvas.clientHeight);
+		nVertices++;
+		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW); // convert to 32bit array
+		gl.drawArrays(gl.POINTS, 0, nVertices);
+	});
 }
