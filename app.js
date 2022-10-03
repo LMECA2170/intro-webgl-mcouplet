@@ -3,25 +3,18 @@ const mat4 = glMatrix.mat4; // 4 x 4 matrix
 const vertexShaderSource = `
 	precision mediump float;
 	attribute vec2 coordinates;
-	attribute vec3 aColor;
-
-	uniform mat4 uRotationMatrix;
-
-	varying lowp vec3 vColor;
 
 	void main() {
-		gl_Position = uRotationMatrix * vec4(coordinates, 0.0, 1.0);
-		vColor = aColor;
+		gl_Position = vec4(coordinates, 0.0, 1.0);
+		gl_PointSize = 10.0;
 	}
 `;
 
 const fragmentShaderSource = `
 	precision mediump float;
 
-	varying lowp vec3 vColor;
-
 	void main() {
-		gl_FragColor = vec4(vColor, 1.0);
+		gl_FragColor = vec4(0.0, 0.0, 0.0, 1.0);
 	}
 `;
 
@@ -61,14 +54,6 @@ function main() {
 	];
 	const nVertices = vertices.length / 2;
 
-	// Define colors (one for each vertex of the square)
-	const colors = [
-		1.0, 1.0, 1.0, // white
-		1.0, 0.0, 0.0, // red
-		0.0, 1.0, 0.0, // green
-		0.0, 0.0, 1.0, // blue
-	];
-
 	// SETUP SHADERS
 	var vertexShader = setupShader(gl, gl.VERTEX_SHADER, vertexShaderSource);
 	var fragmentShader = setupShader(gl, gl.FRAGMENT_SHADER, fragmentShaderSource);
@@ -92,37 +77,22 @@ function main() {
 	gl.vertexAttribPointer(coord, 2, gl.FLOAT, gl.FALSE, 0, 0);
 	gl.enableVertexAttribArray(coord);
 
-	// Vertex colors
-	const colorBuffer = gl.createBuffer();
-	gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
-	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(colors), gl.STATIC_DRAW);
-	var colorAttribLocation = gl.getAttribLocation(program, "aColor");
-	gl.vertexAttribPointer(colorAttribLocation, 3, gl.FLOAT, gl.FALSE, 0, 0);
-	gl.enableVertexAttribArray(colorAttribLocation);
-
-
-	// DRAW TRIANGLE
 	// const rotationMatrix = mat4.create();
-	// dt = 0.1;
-	// mat4.rotate(rotationMatrix, rotationMatrix, dt, [0,0,1]);
-	// mat4.rotate(rotationMatrix, rotationMatrix, dt, [0,0,1]);
-	// gl.uniformMatrix4fv(rotationMatrixLocation, gl.FALSE, rotationMatrix);
-	// gl.drawArrays(gl.TRIANGLE_STRIP, 0, nVertices);
+	// const velocity = Math.PI / 3; // angular velocity in rad/s
 
-	const rotationMatrix = mat4.create();
-	const velocity = Math.PI / 3; // angular velocity in rad/s
+	// var then = 0;
+	// function render(now) {
+	// 	const dt = now - then;
+	// 	then = now;
 
-	var then = 0;
-	function render(now) {
-		const dt = now - then;
-		then = now;
-
-		mat4.rotate(rotationMatrix, rotationMatrix, dt/1000 * velocity, [0,0,1]);
-		gl.uniformMatrix4fv(rotationMatrixLocation, gl.FALSE, rotationMatrix);
-		gl.drawArrays(gl.TRIANGLE_STRIP, 0, nVertices);
+	// 	mat4.rotate(rotationMatrix, rotationMatrix, dt/1000 * velocity, [0,0,1]);
+	// 	gl.uniformMatrix4fv(rotationMatrixLocation, gl.FALSE, rotationMatrix);
+	// 	gl.drawArrays(gl.TRIANGLE_STRIP, 0, nVertices);
 	
-		requestAnimationFrame(render);
-	}
+	// 	requestAnimationFrame(render);
+	// }
 
-	requestAnimationFrame(render);
+	gl.drawArrays(gl.POINTS, 0, nVertices);
+
+	// requestAnimationFrame(render);
 }
